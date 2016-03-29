@@ -29,9 +29,8 @@ function AddLeft() {
 	newElement.innerText = Global.number.value;
 	newElement.className += "output";
 	newElement.addEventListener("click", SelfDelete);
-	var firstchild = Global.output.firstchild;
+	var firstchild = Global.output.firstChild;
 	Global.output.insertBefore(newElement, firstchild);
-	
 }
 
 //Add an element to the right;
@@ -41,7 +40,6 @@ function AddRight() {
 	newElement.innerText = Global.number.value;
 	newElement.className += "output";
 	newElement.addEventListener("click", SelfDelete);
-	var firstchild = Global.output.firstchild;
 	Global.output.appendChild(newElement);
 }
 
