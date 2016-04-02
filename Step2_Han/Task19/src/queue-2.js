@@ -31,7 +31,7 @@ window.onload = function() {
 
 //Add an element to the left;
 function AddLeft() {
-	if (!CheckData()) return;
+	if (!CheckData() || CheckIntermitate()) return;
 	var newElement = document.createElement("div");
 	Global.queue.unshift(newElement);
 	newElement.className += "output";
@@ -47,7 +47,7 @@ function AddLeft() {
 
 //Add an element to the right;
 function AddRight() {
-	if (!CheckData()) return;
+	if (!CheckData() || CheckIntermitate()) return;
 	var newElement = document.createElement("div");
 	Global.queue.push(newElement);
 	newElement.className += "output";
@@ -60,12 +60,14 @@ function AddRight() {
 
 //Delete an element on the left;
 function DeleteLeft() {
+	if (CheckIntermitate()) return;
 	alert("Delete: " + parseInt(output.firstChild.style.height));
 	output.removeChild(output.firstChild);
 }
 
 //Delete an element on the right;
 function DeleteRight() {
+	if (CheckIntermitate()) return;
 	alert("Delete: " + parseInt(output.lastChild.style.height));
 	output.removeChild(output.lastChild);
 }
@@ -87,16 +89,26 @@ function CheckData() {
 
 //The way to delete the clicked elements;
 function SelfDelete() {
-	//console.log(this.style.height);
+	if(CheckIntermitate()) return;
 	var temp = this.nextSibling;
 	alert("Delete: " + parseInt(this.style.height));
 	output.removeChild(this);
 	if (temp) FixPosition(temp);
 }
 
+
+function CheckIntermitate() {
+	if (Global.start) {
+		alert("Please wait until current sort finished!");
+		return true;
+	}
+}
 //Sort the datas;
 function Sort() {
+		if (CheckIntermitate()) return;
+
 		var i = 0, j = 0;
+		Global.start = true;
 		var timer_in = setInterval(function() {
 
 			if(j != 0 && !(i == Global.queue.length - 2 && j == Global.queue.length - i - 1))
@@ -105,8 +117,10 @@ function Sort() {
 			if (j >= Global.queue.length - i - 1) {
 				i++;
 				j = 0;
-				if (i >= Global.queue.length - 1)
+				if (i >= Global.queue.length - 1) {
 					clearInterval(timer_in);
+					Global.start = false;
+				}
 				return;
 			}
 
@@ -126,6 +140,8 @@ function Sort() {
 //Create some elements when open the website;
 function Init() {
 	var obj, frame = document.createDocumentFragment();
+	Global.start = false;
+
 	for (var i = 0; i < Global.init.length; i++) {
 
 		obj = document.createElement("div");
