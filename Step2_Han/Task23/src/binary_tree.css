@@ -7,8 +7,7 @@
 }
 
 #container {
-    width: 900px;
-    height: 400px;
+    height: 200px;
 }
 
 div {
@@ -17,12 +16,11 @@ div {
     background-color: white;
 }
 
-.depth-4 {
+.parent {
     width: 100%;
-    margin: 0;
 }
 
-.depth-3, .depth-2, .depth-1 {
+.child {
     width: 50%;
 }
 

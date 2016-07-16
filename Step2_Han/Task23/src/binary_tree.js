@@ -1,69 +1,57 @@
-window.onload = binary_tree;
+Global = {
+    treeList : []
+};
 
-var Global = {}
+window.onload = MultiWayTree;
 
-function binary_tree() {
-    var tree = createBinaryDomTree(4);
-    document.getElementById('container').appendChild(tree.value);
-    Global.root = tree;
+function MultiWayTree() {
+    var _root = createTree(4);
+    var domTree = createDomTree(_root);
+    domTree.className = domTree.className.replace('margin-10 child','parent');
+    document.getElementById('container').appendChild(domTree);
 }
 
-function node(left, right, value) {
-    this.left = left;
-    this.right = right;
+function node(value, childNum) {
     this.value = value;
+    this.children = [];
 }
 
-function createBinaryDomTree(depth) {
-    var newElement = document.createElement('div');
-    newElement.className += ' depth-' + depth + " padding-10" + " margin-10";
-    var _root = new node(null, null, newElement);
+function createTree(depth) {
+    var childNum = parseInt(Math.random() * 3) + 1;
+    var _root = new node(depth, childNum);
     if (depth > 1) {
-        _root.left = createBinaryDomTree(depth - 1);
-        _root.right = createBinaryDomTree(depth - 1);
-        _root.value.appendChild(_root.left.value);
-        _root.value.appendChild(_root.right.value);
+        for (var i = 0; i < childNum; i++) {
+            _root.children[i] = createTree(depth - 1);
+        }
     }
     return _root;
 }
 
-function PreOrderTraverse(_root, divlist) {
-    divlist.push(_root.value);
-    if (_root.left != null) PreOrderTraverse(_root.left, divlist);
-    if (_root.right != null) PreOrderTraverse(_root.right, divlist);
-}
+function createDomTree(_root) {
+    var newDiv = document.createElement('div');
+    var newContent = document.createTextNode(_root.value);
+    newDiv.appendChild(newContent);
+    newDiv.className += 'padding-10 margin-10 child';
+    
+    Global.treeList.push(newDiv);
 
-function InOrderTraverse(_root, divlist) {
-    if (_root.left != null) InOrderTraverse(_root.left, divlist);
-    divlist.push(_root.value);
-    if (_root.right != null) InOrderTraverse(_root.right, divlist);
-}
-
-function PostOrderTraverse(_root, divlist) {
-    if (_root.left != null) PostOrderTraverse(_root.left, divlist);
-    if (_root.right != null) PostOrderTraverse(_root.right, divlist);
-    divlist.push(_root.value);
-}
-
-function ChangeColor(way) {
-    var divlist = [];
-    _root = Global.root;
-    if (way == 'preorder') {
-        PreOrderTraverse(_root, divlist);
-    } else if (way == 'inorder') {
-        InOrderTraverse(_root, divlist);
-    } else if (way == 'postorder') {
-        PostOrderTraverse(_root, divlist);
+    if (_root.children.length != 0) {
+        for (child of _root.children) {
+            newDiv.appendChild(createDomTree(child));
+        }
     }
+    return newDiv;
+}
 
+function bfsTraverse() {
+    var list = Global.treeList;
     var i = 0;
     var timer = setInterval(function() {
         if (i > 0)
-            divlist[i - 1].className = divlist[i - 1].className.replace(' active', '');
-        if (i < divlist.length) {
-            divlist[i].className += ' active';
-        } else {
-            clearInterval(timer); }
+            list[i - 1].className = list[i - 1].className.replace(' active', '');
+        if (i < list.length) 
+            list[i].className += ' active';
+        else clearInterval(timer);
         i++;
-    }, 500)
+    }, 500);
 }
