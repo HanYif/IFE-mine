@@ -1,0 +1,31 @@
+.padding-10 {
+    padding: 10px;
+}
+
+.margin-10 {
+    margin: 10px;
+}
+
+#container {
+    width: 900px;
+    height: 400px;
+}
+
+div {
+    border: 1px solid gray;
+    display: flex;
+    background-color: white;
+}
+
+.depth-4 {
+    width: 100%;
+    margin: 0;
+}
+
+.depth-3, .depth-2, .depth-1 {
+    width: 50%;
+}
+
+.active {
+    background-color: #e74f4d;
+}
